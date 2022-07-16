@@ -2,11 +2,31 @@
 
 All notable changes to this project will be documented in this file.
 
-## [HEAD](https://github.com/jonz94/Sarasa-Gothic-Nerd-Fonts/compare/v0.35.2...HEAD)
+## [HEAD](https://github.com/jonz94/Sarasa-Gothic-Nerd-Fonts/compare/v0.36.7...HEAD)
+
+## [v0.36.7](https://github.com/jonz94/Sarasa-Gothic-Nerd-Fonts/compare/v0.36.6...v0.36.7) (2022-07-17)
 
 ### ✨ Features
 
-- Add TTC format 👉 https://github.com/jonz94/ttc-sarasa-gothic-nerd-fonts
+- Add TTC format 👉 https://github.com/jonz94/ttc-sarasa-gothic-nerd-fonts ([#7](https://github.com/jonz94/Sarasa-Gothic-Nerd-Fonts/pull/7)), closes [#3](https://github.com/jonz94/Sarasa-Gothic-Nerd-Fonts/issues/3)
+
+- Installation
+
+  - Scoop
+
+  ```
+  scoop install sarasa-nerd-font-ttc
+  ```
+
+  - Homebrew
+
+  ```shell
+  brew install font-sarasa-nerd-font-ttc
+  ```
+
+  - Linux
+
+  https://gist.github.com/jonz94/bf5b885e656caa88b6adbf6df93612e2#file-option-2-install-sarasa-nerd-font-ttc-sh
 
 ## [v0.35.2](https://github.com/jonz94/Sarasa-Gothic-Nerd-Fonts/compare/v0.35.1...v0.35.2) (2021-11-28)
 
