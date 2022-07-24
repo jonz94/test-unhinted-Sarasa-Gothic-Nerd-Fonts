@@ -56,7 +56,7 @@ jobs:
         run: |
           LATEST_TAG=$(echo ${GITHUB_REF} | cut -d '/' -f 3)
           echo downloading Sarasa Gothic ${LATEST_TAG}
-          curl -L https://github.com/be5invis/Sarasa-Gothic/releases/download/${LATEST_TAG}/sarasa-gothic-ttf-${LATEST_TAG:1}.7z -o sarasa-gothic-ttf.7z
+          curl --retry 3 --retry-delay 5 -L https://github.com/be5invis/Sarasa-Gothic/releases/download/${LATEST_TAG}/sarasa-gothic-ttf-${LATEST_TAG:1}.7z -o sarasa-gothic-ttf.7z
       - run: ls -l
       - run: 7z x *.7z
       - run: ls -l
@@ -132,7 +132,7 @@ jobs:
         run: |
           LATEST_TAG=$(echo ${GITHUB_REF} | cut -d '/' -f 3)
           echo downloading Sarasa Gothic ${LATEST_TAG}
-          curl -L https://github.com/be5invis/Sarasa-Gothic/releases/download/${LATEST_TAG}/sarasa-gothic-ttf-${LATEST_TAG:1}.7z -o sarasa-gothic-ttf.7z
+          curl --retry 3 --retry-delay 5 -L https://github.com/be5invis/Sarasa-Gothic/releases/download/${LATEST_TAG}/sarasa-gothic-ttf-${LATEST_TAG:1}.7z -o sarasa-gothic-ttf.7z
       - run: ls -l
       - run: 7z x *.7z
       - run: ls -l
