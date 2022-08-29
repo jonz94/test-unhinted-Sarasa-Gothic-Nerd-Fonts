@@ -12,7 +12,7 @@ jobs:
     if: github.repository == 'jonz94/Sarasa-Gothic-Nerd-Fonts'
     runs-on: ubuntu-latest
     env:
-      NERD_FONTS_VERSION: v2.1.0
+      NERD_FONTS_VERSION: v2.2.1
     steps:
       - uses: actions/checkout@v3
       - name: download font patcher
