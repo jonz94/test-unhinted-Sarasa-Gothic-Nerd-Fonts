@@ -2,7 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
-## [HEAD](https://github.com/jonz94/Sarasa-Gothic-Nerd-Fonts/compare/v0.36.7...HEAD)
+## [HEAD](https://github.com/jonz94/Sarasa-Gothic-Nerd-Fonts/compare/v0.37.0...HEAD)
+
+## [v0.37.0](https://github.com/jonz94/Sarasa-Gothic-Nerd-Fonts/compare/v0.36.8...v0.37.0) (2022-08-29)
+
+### ✨ Features
+
+- Upgrade nerd fonts to v2.2.1 ([24d54d9](https://github.com/jonz94/Sarasa-Gothic-Nerd-Fonts/commit/24d54d9c4b0d54eef0aadde07c15600aa0c400b9))
+
+### ✅ Bug Fixes
+
+- Run font-patcher with `--adjust-line-height` option ([#9](https://github.com/jonz94/Sarasa-Gothic-Nerd-Fonts/pull/9)), closes [#8](https://github.com/jonz94/Sarasa-Gothic-Nerd-Fonts/issues/8)
 
 ## [v0.36.7](https://github.com/jonz94/Sarasa-Gothic-Nerd-Fonts/compare/v0.36.6...v0.36.7) (2022-07-17)
 
