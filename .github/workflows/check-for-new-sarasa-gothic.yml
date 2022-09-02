@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       should-update: ${{ steps.check.outputs.should-update }}
-      latest-tag: ${{ steps.check.outputs.latest-tag }}
+      latest-tag-with-revision: ${{ steps.check.outputs.latest-tag-with-revision }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -31,16 +31,19 @@ jobs:
 
           echo latest tag of be5invis/Sarasa-Gothic is ${LATEST_TAG}
 
+          # set initial revision as 0
+          LATEST_TAG_WITH_REVISION="${LATEST_TAG}-0"
+
           # check if we already have a matching tag
-          if git rev-parse ${LATEST_TAG} >/dev/null 2>&1; then
-            echo ${LATEST_TAG} tag exists, do nothing.
+          if git rev-parse ${LATEST_TAG_WITH_REVISION} >/dev/null 2>&1; then
+            echo "${LATEST_TAG_WITH_REVISION}" tag exists, do nothing.
             echo "::set-output name=should-update::false"
             exit 0
           fi
 
           echo a newer version is available
           echo "::set-output name=should-update::true"
-          echo "::set-output name=latest-tag::${LATEST_TAG}"
+          echo "::set-output name=latest-tag-with-revision::${LATEST_TAG_WITH_REVISION}"
 
   tag:
     needs: check
@@ -51,11 +54,11 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.WORKFLOW_PERSONAL_ACCESS_TOKEN }}
-      - name: tag
+      - name: create tag ${{ needs.check.outputs.latest-tag-with-revision }}
         run: |
-          LATEST_TAG="${{ needs.check.outputs.latest-tag }}"
-          echo ${LATEST_TAG} tag does not exist, tag it to trigger next action.
+          LATEST_TAG_WITH_REVISION="${{ needs.check.outputs.latest-tag-with-revision }}"
+          echo ${LATEST_TAG_WITH_REVISION} tag does not exist, tag it to trigger next action.
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git tag -a ${LATEST_TAG} -m "🎉 build: release version ${LATEST_TAG}"
+          git tag -a ${LATEST_TAG_WITH_REVISION} -m "🎉 build: release version ${LATEST_TAG_WITH_REVISION}"
           git push origin --tags
