@@ -12,7 +12,7 @@ All notable changes to this project will be documented in this file.
 
 ### ✅ Bug Fixes
 
-- Downgrade nerd fonts back to v2.2.0 ([2445b49](https://github.com/jonz94/Sarasa-Gothic-Nerd-Fonts/commit/2445b4958fe1c8a92641fd0abec5293e0dfa4d7a)), closes [#10](https://github.com/jonz94/Sarasa-Gothic-Nerd-Fonts/issues/10)
+- Downgrade nerd fonts back to v2.1.0 ([2445b49](https://github.com/jonz94/Sarasa-Gothic-Nerd-Fonts/commit/2445b4958fe1c8a92641fd0abec5293e0dfa4d7a)), closes [#10](https://github.com/jonz94/Sarasa-Gothic-Nerd-Fonts/issues/10)
 
 ## [v0.37.0](https://github.com/jonz94/Sarasa-Gothic-Nerd-Fonts/compare/v0.36.8...v0.37.0) (2022-08-29)
 
