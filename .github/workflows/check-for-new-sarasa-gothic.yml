@@ -10,7 +10,7 @@ on:
 jobs:
   check:
     if: github.repository == 'jonz94/Sarasa-Gothic-Nerd-Fonts'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     outputs:
       should-update: ${{ steps.check.outputs.should-update }}
       latest-tag-with-revision: ${{ steps.check.outputs.latest-tag-with-revision }}
@@ -48,7 +48,7 @@ jobs:
   tag:
     needs: check
     if: ${{ needs.check.outputs.should-update == 'true' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
         with:

@@ -8,29 +8,8 @@ on:
 concurrency: generate-fonts
 
 jobs:
-  prepare:
-    if: github.repository == 'jonz94/Sarasa-Gothic-Nerd-Fonts'
-    runs-on: ubuntu-latest
-    env:
-      NERD_FONTS_VERSION: v2.1.0
-    steps:
-      - uses: actions/checkout@v3
-      - name: download font patcher
-        run: curl -L https://raw.githubusercontent.com/ryanoasis/nerd-fonts/${NERD_FONTS_VERSION}/font-patcher --output font-patcher
-      - name: download source glyphs
-        run: bash download-source-glyphs.sh
-      - run: tree .
-      - name: upload font patcher and source glyphs
-        uses: actions/upload-artifact@v3
-        with:
-          name: font patcher and source glyphs
-          path: |
-            font-patcher
-            src/glyphs/*
-
   patch1:
-    needs: prepare
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         styles: ['fixed', 'fixed-slab', 'mono', 'mono-slab']
@@ -50,23 +29,50 @@ jobs:
           ]
     env:
       FILENAME: 'sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-${{ matrix.variants }}'
+      NERD_FONTS_VERSION: v2.2.2
     steps:
       - uses: actions/checkout@v3
-      - name: Download latest version of Sarasa Gothic from GitHub release page
+
+      # credits: https://github.com/adam7/delugia-code/blob/411f2aecdef35d6bb92776d26bb5efe4ee799e0a/.github/workflows/ci.yaml#L77-L100
+      - name: Fetch FontForge
+        run: |
+          sudo apt install software-properties-common python3-fontforge fuse -y -q
+          curl -L "https://github.com/fontforge/fontforge/releases/download/20220308/FontForge-2022-03-08-582bd41-x86_64.AppImage" \
+            --output fontforge
+          chmod u+x fontforge
+          echo Try appimage
+          ./fontforge --version
+          echo `pwd` >> $GITHUB_PATH
+          echo Try appimage with path
+          fontforge --version
+      - name: Get Font Patcher
+        uses: robinraju/release-downloader@v1.6
+        with:
+          repository: 'ryanoasis/nerd-fonts'
+          tag: ${{ env.NERD_FONTS_VERSION }}
+          fileName: 'FontPatcher.zip'
+      - name: Open Font Patcher release
+        run: |
+          unzip FontPatcher.zip
+
+      - run: tree .
+      - name: Get the latest version of Sarasa Gothic
         run: |
           LATEST_TAG=$(echo ${{ github.ref_name }} | cut -d '-' -f 1)
-          echo downloading Sarasa Gothic ${LATEST_TAG}
-          curl --retry 3 --retry-delay 5 -L https://github.com/be5invis/Sarasa-Gothic/releases/download/${LATEST_TAG}/sarasa-gothic-ttf-${LATEST_TAG:1}.7z -o sarasa-gothic-ttf.7z
+          echo "LATEST_TAG=${LATEST_TAG}" >> $GITHUB_ENV
+          echo LATEST_TAG is ${{ env.LATEST_TAG }}
+          echo "LATEST_VERSION=${LATEST_TAG:1}" >> $GITHUB_ENV
+          echo LATEST_VERSION is ${{ env.LATEST_VERSION }}
+      - name: Download latest version of Sarasa Gothic from GitHub release page
+        uses: robinraju/release-downloader@v1.6
+        with:
+          repository: 'be5invis/Sarasa-Gothic'
+          tag: ${{ env.LATEST_TAG }}
+          fileName: 'sarasa-gothic-ttf-${{ env.LATEST_VERSION }}.7z'
+          out-file-path: sarasa-gothic-ttf.7z
       - run: ls -l
       - run: 7z x *.7z
       - run: ls -l
-      - name: install FontForge
-        run: sudo apt install fontforge -y
-      - name: download font patcher and source glyphs
-        uses: actions/download-artifact@v3
-        with:
-          name: font patcher and source glyphs
-      - run: tree .
       - uses: actions/setup-python@v4
         with:
           python-version: '3.x'
@@ -74,7 +80,7 @@ jobs:
         run: pip install configparser
       - run: ls -l
       - name: patch font
-        run: fontforge -script font-patcher --adjust-line-height --careful --complete --no-progressbars --quiet "${FILENAME}.ttf"
+        run: fontforge -script "${PWD}/font-patcher" --adjust-line-height --careful --complete --no-progressbars --quiet "${PWD}/${FILENAME}.ttf" --outputdir "${PWD}"
       - run: ls -l
       - name: rename patched font files
         run: mv *Complete.ttf "${FILENAME}-nerd-font.ttf"
@@ -105,8 +111,7 @@ jobs:
           path: sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-${{ matrix.variants }}-nerd-font.ttf
 
   patch2:
-    needs: prepare
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         styles: ['term', 'term-slab', 'gothic', 'ui']
@@ -126,23 +131,50 @@ jobs:
           ]
     env:
       FILENAME: 'sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-${{ matrix.variants }}'
+      NERD_FONTS_VERSION: v2.2.2
     steps:
       - uses: actions/checkout@v3
-      - name: download latest version of Sarasa Gothic from GitHub release page
+
+      # credits: https://github.com/adam7/delugia-code/blob/411f2aecdef35d6bb92776d26bb5efe4ee799e0a/.github/workflows/ci.yaml#L77-L100
+      - name: Fetch FontForge
+        run: |
+          sudo apt install software-properties-common python3-fontforge fuse -y -q
+          curl -L "https://github.com/fontforge/fontforge/releases/download/20220308/FontForge-2022-03-08-582bd41-x86_64.AppImage" \
+            --output fontforge
+          chmod u+x fontforge
+          echo Try appimage
+          ./fontforge --version
+          echo `pwd` >> $GITHUB_PATH
+          echo Try appimage with path
+          fontforge --version
+      - name: Get Font Patcher
+        uses: robinraju/release-downloader@v1.6
+        with:
+          repository: 'ryanoasis/nerd-fonts'
+          tag: ${{ env.NERD_FONTS_VERSION }}
+          fileName: 'FontPatcher.zip'
+      - name: Open Font Patcher release
+        run: |
+          unzip FontPatcher.zip
+
+      - run: tree .
+      - name: Get the latest version of Sarasa Gothic
         run: |
           LATEST_TAG=$(echo ${{ github.ref_name }} | cut -d '-' -f 1)
-          echo downloading Sarasa Gothic ${LATEST_TAG}
-          curl --retry 3 --retry-delay 5 -L https://github.com/be5invis/Sarasa-Gothic/releases/download/${LATEST_TAG}/sarasa-gothic-ttf-${LATEST_TAG:1}.7z -o sarasa-gothic-ttf.7z
+          echo "LATEST_TAG=${LATEST_TAG}" >> $GITHUB_ENV
+          echo LATEST_TAG is ${{ env.LATEST_TAG }}
+          echo "LATEST_VERSION=${LATEST_TAG:1}" >> $GITHUB_ENV
+          echo LATEST_VERSION is ${{ env.LATEST_VERSION }}
+      - name: Download latest version of Sarasa Gothic from GitHub release page
+        uses: robinraju/release-downloader@v1.6
+        with:
+          repository: 'be5invis/Sarasa-Gothic'
+          tag: ${{ env.LATEST_TAG }}
+          fileName: 'sarasa-gothic-ttf-${{ env.LATEST_VERSION }}.7z'
+          out-file-path: sarasa-gothic-ttf.7z
       - run: ls -l
       - run: 7z x *.7z
       - run: ls -l
-      - name: install FontForge
-        run: sudo apt install fontforge -y
-      - name: download font patcher and source glyphs
-        uses: actions/download-artifact@v3
-        with:
-          name: font patcher and source glyphs
-      - run: tree .
       - uses: actions/setup-python@v4
         with:
           python-version: '3.x'
@@ -150,7 +182,7 @@ jobs:
         run: pip install configparser
       - run: ls -l
       - name: patch font
-        run: fontforge -script font-patcher --adjust-line-height --careful --complete --no-progressbars --quiet "${FILENAME}.ttf"
+        run: fontforge -script "${PWD}/font-patcher" --adjust-line-height --careful --complete --no-progressbars --quiet "${PWD}/${FILENAME}.ttf" --outputdir "${PWD}"
       - run: ls -l
       - name: rename patched font files
         run: mv *Complete.ttf "${FILENAME}-nerd-font.ttf"
@@ -182,7 +214,7 @@ jobs:
 
   zip:
     needs: [patch1, patch2]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         styles: ['fixed', 'fixed-slab', 'mono', 'mono-slab', 'term', 'term-slab', 'gothic', 'ui']
@@ -234,7 +266,7 @@ jobs:
   release:
     needs: zip
     if: startsWith(github.ref, 'refs/tags/')
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - run: ls -l
 
