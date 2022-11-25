@@ -9,7 +9,7 @@ $orthographies = "cl", "hc", "j", "k", "sc", "tc"
 foreach($style in $styles) {
   foreach($orthography in $orthographies) {
     $uses = '.jobs.job.steps[' + $counter + '].uses = \"actions/download-artifact@v3\"'
-    $name = '.jobs.job.steps[' + $counter + '].with.name = \"sarasa-' + $style + '-' + $orthography + '-nerd-font.zip\"'
+    $name = '.jobs.job.steps[' + $counter + '].with.name = \"sarasa-' + $style + '-' + $orthography + '-unhinted-nerd-font.zip\"'
 
     yq e -i $uses $outputFile
     yq e -i $name $outputFile

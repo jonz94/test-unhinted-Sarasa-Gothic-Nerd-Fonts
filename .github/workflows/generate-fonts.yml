@@ -68,7 +68,7 @@ jobs:
         with:
           repository: 'be5invis/Sarasa-Gothic'
           tag: ${{ env.LATEST_TAG }}
-          fileName: 'sarasa-gothic-ttf-${{ env.LATEST_VERSION }}.7z'
+          fileName: 'sarasa-gothic-ttf-unhinted-${{ env.LATEST_VERSION }}.7z'
           out-file-path: sarasa-gothic-ttf.7z
       - run: ls -l
       - run: 7z x *.7z
@@ -83,32 +83,32 @@ jobs:
         run: fontforge -script "${PWD}/font-patcher" --adjust-line-height --careful --complete --no-progressbars --quiet --removeligatures "${PWD}/${FILENAME}.ttf" --outputdir "${PWD}"
       - run: ls -l
       - name: rename patched font files
-        run: mv *Complete.ttf "${FILENAME}-nerd-font.ttf"
+        run: mv *Complete.ttf "${FILENAME}-unhinted-nerd-font.ttf"
       - run: ls -l
       - name: install fonttools
         run: pip install fonttools
       - name: correcting xAvgCharWidth to fix alignment issue
         run: |
           ttx -t "OS/2" "${FILENAME}.ttf"
-          ttx -t "OS/2" "${FILENAME}-nerd-font.ttf"
+          ttx -t "OS/2" "${FILENAME}-unhinted-nerd-font.ttf"
           ls -l *.ttx
           cat "${FILENAME}.ttx"
-          cat "${FILENAME}-nerd-font.ttx"
+          cat "${FILENAME}-unhinted-nerd-font.ttx"
           original_x_avg_char_width="$(grep xAvgCharWidth "${FILENAME}.ttx" | cut -d '"' -f 2)"
           echo original xAvgCharWidth is $original_x_avg_char_width
-          sed -i "s/xAvgCharWidth value=\"[0-9]\+\"/xAvgCharWidth value=\"${original_x_avg_char_width}\"/g" "${FILENAME}-nerd-font.ttx"
-          cat "${FILENAME}-nerd-font.ttx"
-          mv "${FILENAME}-nerd-font.ttf" "${FILENAME}-nerd-font.original.ttf"
-          ttx -o "${FILENAME}-nerd-font.ttf" -m "${FILENAME}-nerd-font.original.ttf" "${FILENAME}-nerd-font.ttx"
+          sed -i "s/xAvgCharWidth value=\"[0-9]\+\"/xAvgCharWidth value=\"${original_x_avg_char_width}\"/g" "${FILENAME}-unhinted-nerd-font.ttx"
+          cat "${FILENAME}-unhinted-nerd-font.ttx"
+          mv "${FILENAME}-unhinted-nerd-font.ttf" "${FILENAME}-unhinted-nerd-font.original.ttf"
+          ttx -o "${FILENAME}-unhinted-nerd-font.ttf" -m "${FILENAME}-unhinted-nerd-font.original.ttf" "${FILENAME}-unhinted-nerd-font.ttx"
       - name: build hdmx table to fix alignment issue
-        run: python build-hdmx-for-sarasa.py "${FILENAME}-nerd-font.ttf"
+        run: python build-hdmx-for-sarasa.py "${FILENAME}-unhinted-nerd-font.ttf"
       - name: correct TTF font family name
-        run: python correct-ttf-font-family-name.py "${FILENAME}-nerd-font.ttf"
+        run: python correct-ttf-font-family-name.py "${FILENAME}-unhinted-nerd-font.ttf"
       - name: upload patched font
         uses: actions/upload-artifact@v3
         with:
-          name: patched sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-${{ matrix.variants }} font
-          path: sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-${{ matrix.variants }}-nerd-font.ttf
+          name: patched sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-${{ matrix.variants }}-unhinted font
+          path: sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-${{ matrix.variants }}-unhinted-nerd-font.ttf
 
   patch2:
     runs-on: ubuntu-22.04
@@ -170,7 +170,7 @@ jobs:
         with:
           repository: 'be5invis/Sarasa-Gothic'
           tag: ${{ env.LATEST_TAG }}
-          fileName: 'sarasa-gothic-ttf-${{ env.LATEST_VERSION }}.7z'
+          fileName: 'sarasa-gothic-ttf-unhinted-${{ env.LATEST_VERSION }}.7z'
           out-file-path: sarasa-gothic-ttf.7z
       - run: ls -l
       - run: 7z x *.7z
@@ -185,32 +185,32 @@ jobs:
         run: fontforge -script "${PWD}/font-patcher" --adjust-line-height --careful --complete --no-progressbars --quiet --removeligatures "${PWD}/${FILENAME}.ttf" --outputdir "${PWD}"
       - run: ls -l
       - name: rename patched font files
-        run: mv *Complete.ttf "${FILENAME}-nerd-font.ttf"
+        run: mv *Complete.ttf "${FILENAME}-unhinted-nerd-font.ttf"
       - run: ls -l
       - name: install fonttools
         run: pip install fonttools
       - name: correcting xAvgCharWidth to fix alignment issue
         run: |
           ttx -t "OS/2" "${FILENAME}.ttf"
-          ttx -t "OS/2" "${FILENAME}-nerd-font.ttf"
+          ttx -t "OS/2" "${FILENAME}-unhinted-nerd-font.ttf"
           ls -l *.ttx
           cat "${FILENAME}.ttx"
-          cat "${FILENAME}-nerd-font.ttx"
+          cat "${FILENAME}-unhinted-nerd-font.ttx"
           original_x_avg_char_width="$(grep xAvgCharWidth "${FILENAME}.ttx" | cut -d '"' -f 2)"
           echo original xAvgCharWidth is $original_x_avg_char_width
-          sed -i "s/xAvgCharWidth value=\"[0-9]\+\"/xAvgCharWidth value=\"${original_x_avg_char_width}\"/g" "${FILENAME}-nerd-font.ttx"
-          cat "${FILENAME}-nerd-font.ttx"
-          mv "${FILENAME}-nerd-font.ttf" "${FILENAME}-nerd-font.original.ttf"
-          ttx -o "${FILENAME}-nerd-font.ttf" -m "${FILENAME}-nerd-font.original.ttf" "${FILENAME}-nerd-font.ttx"
+          sed -i "s/xAvgCharWidth value=\"[0-9]\+\"/xAvgCharWidth value=\"${original_x_avg_char_width}\"/g" "${FILENAME}-unhinted-nerd-font.ttx"
+          cat "${FILENAME}-unhinted-nerd-font.ttx"
+          mv "${FILENAME}-unhinted-nerd-font.ttf" "${FILENAME}-unhinted-nerd-font.original.ttf"
+          ttx -o "${FILENAME}-unhinted-nerd-font.ttf" -m "${FILENAME}-unhinted-nerd-font.original.ttf" "${FILENAME}-unhinted-nerd-font.ttx"
       - name: build hdmx table to fix alignment issue
-        run: python build-hdmx-for-sarasa.py "${FILENAME}-nerd-font.ttf"
+        run: python build-hdmx-for-sarasa.py "${FILENAME}-unhinted-nerd-font.ttf"
       - name: correct TTF font family name
-        run: python correct-ttf-font-family-name.py "${FILENAME}-nerd-font.ttf"
+        run: python correct-ttf-font-family-name.py "${FILENAME}-unhinted-nerd-font.ttf"
       - name: Upload patched font
         uses: actions/upload-artifact@v3
         with:
-          name: patched sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-${{ matrix.variants }} font
-          path: sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-${{ matrix.variants }}-nerd-font.ttf
+          name: patched sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-${{ matrix.variants }}-unhinted font
+          path: sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-${{ matrix.variants }}-unhinted-nerd-font.ttf
 
   zip:
     needs: [patch1, patch2]
@@ -223,45 +223,45 @@ jobs:
       # start of part generated by `generate-download-patched-fonts` script
       - uses: actions/download-artifact@v3
         with:
-          name: patched sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-regular font
+          name: patched sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-regular-unhinted font
       - uses: actions/download-artifact@v3
         with:
-          name: patched sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-italic font
+          name: patched sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-italic-unhinted font
       - uses: actions/download-artifact@v3
         with:
-          name: patched sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-bold font
+          name: patched sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-bold-unhinted font
       - uses: actions/download-artifact@v3
         with:
-          name: patched sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-bolditalic font
+          name: patched sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-bolditalic-unhinted font
       - uses: actions/download-artifact@v3
         with:
-          name: patched sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-semibold font
+          name: patched sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-semibold-unhinted font
       - uses: actions/download-artifact@v3
         with:
-          name: patched sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-semibolditalic font
+          name: patched sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-semibolditalic-unhinted font
       - uses: actions/download-artifact@v3
         with:
-          name: patched sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-light font
+          name: patched sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-light-unhinted font
       - uses: actions/download-artifact@v3
         with:
-          name: patched sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-lightitalic font
+          name: patched sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-lightitalic-unhinted font
       - uses: actions/download-artifact@v3
         with:
-          name: patched sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-extralight font
+          name: patched sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-extralight-unhinted font
       - uses: actions/download-artifact@v3
         with:
-          name: patched sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-extralightitalic font
+          name: patched sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-extralightitalic-unhinted font
       # end of part generated by `generate-download-patched-fonts` script
 
       - run: ls -l
       - name: zip patched font files
-        run: zip -r sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-nerd-font.zip sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-*-nerd-font.ttf
+        run: zip -r sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-unhinted-nerd-font.zip sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-*-unhinted-nerd-font.ttf
       - run: ls -l
       - name: upload zip
         uses: actions/upload-artifact@v3
         with:
-          name: sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-nerd-font.zip
-          path: sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-nerd-font.zip
+          name: sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-unhinted-nerd-font.zip
+          path: sarasa-${{ matrix.styles }}-${{ matrix.orthographies }}-unhinted-nerd-font.zip
 
   release:
     needs: zip
@@ -273,148 +273,148 @@ jobs:
       # start of part generated by `generate-download-patched-zips` script
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-fixed-cl-nerd-font.zip
+          name: sarasa-fixed-cl-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-fixed-hc-nerd-font.zip
+          name: sarasa-fixed-hc-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-fixed-j-nerd-font.zip
+          name: sarasa-fixed-j-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-fixed-k-nerd-font.zip
+          name: sarasa-fixed-k-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-fixed-sc-nerd-font.zip
+          name: sarasa-fixed-sc-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-fixed-tc-nerd-font.zip
+          name: sarasa-fixed-tc-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-fixed-slab-cl-nerd-font.zip
+          name: sarasa-fixed-slab-cl-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-fixed-slab-hc-nerd-font.zip
+          name: sarasa-fixed-slab-hc-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-fixed-slab-j-nerd-font.zip
+          name: sarasa-fixed-slab-j-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-fixed-slab-k-nerd-font.zip
+          name: sarasa-fixed-slab-k-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-fixed-slab-sc-nerd-font.zip
+          name: sarasa-fixed-slab-sc-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-fixed-slab-tc-nerd-font.zip
+          name: sarasa-fixed-slab-tc-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-mono-cl-nerd-font.zip
+          name: sarasa-mono-cl-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-mono-hc-nerd-font.zip
+          name: sarasa-mono-hc-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-mono-j-nerd-font.zip
+          name: sarasa-mono-j-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-mono-k-nerd-font.zip
+          name: sarasa-mono-k-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-mono-sc-nerd-font.zip
+          name: sarasa-mono-sc-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-mono-tc-nerd-font.zip
+          name: sarasa-mono-tc-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-mono-slab-cl-nerd-font.zip
+          name: sarasa-mono-slab-cl-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-mono-slab-hc-nerd-font.zip
+          name: sarasa-mono-slab-hc-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-mono-slab-j-nerd-font.zip
+          name: sarasa-mono-slab-j-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-mono-slab-k-nerd-font.zip
+          name: sarasa-mono-slab-k-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-mono-slab-sc-nerd-font.zip
+          name: sarasa-mono-slab-sc-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-mono-slab-tc-nerd-font.zip
+          name: sarasa-mono-slab-tc-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-term-cl-nerd-font.zip
+          name: sarasa-term-cl-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-term-hc-nerd-font.zip
+          name: sarasa-term-hc-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-term-j-nerd-font.zip
+          name: sarasa-term-j-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-term-k-nerd-font.zip
+          name: sarasa-term-k-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-term-sc-nerd-font.zip
+          name: sarasa-term-sc-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-term-tc-nerd-font.zip
+          name: sarasa-term-tc-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-term-slab-cl-nerd-font.zip
+          name: sarasa-term-slab-cl-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-term-slab-hc-nerd-font.zip
+          name: sarasa-term-slab-hc-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-term-slab-j-nerd-font.zip
+          name: sarasa-term-slab-j-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-term-slab-k-nerd-font.zip
+          name: sarasa-term-slab-k-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-term-slab-sc-nerd-font.zip
+          name: sarasa-term-slab-sc-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-term-slab-tc-nerd-font.zip
+          name: sarasa-term-slab-tc-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-gothic-cl-nerd-font.zip
+          name: sarasa-gothic-cl-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-gothic-hc-nerd-font.zip
+          name: sarasa-gothic-hc-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-gothic-j-nerd-font.zip
+          name: sarasa-gothic-j-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-gothic-k-nerd-font.zip
+          name: sarasa-gothic-k-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-gothic-sc-nerd-font.zip
+          name: sarasa-gothic-sc-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-gothic-tc-nerd-font.zip
+          name: sarasa-gothic-tc-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-ui-cl-nerd-font.zip
+          name: sarasa-ui-cl-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-ui-hc-nerd-font.zip
+          name: sarasa-ui-hc-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-ui-j-nerd-font.zip
+          name: sarasa-ui-j-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-ui-k-nerd-font.zip
+          name: sarasa-ui-k-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-ui-sc-nerd-font.zip
+          name: sarasa-ui-sc-unhinted-nerd-font.zip
       - uses: actions/download-artifact@v3
         with:
-          name: sarasa-ui-tc-nerd-font.zip
+          name: sarasa-ui-tc-unhinted-nerd-font.zip
       # end of part generated by `generate-download-patched-zips` script
 
       - run: ls -l

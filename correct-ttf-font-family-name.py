@@ -25,32 +25,36 @@ def main():
         langID = entry.langID
 
         if langID in [1028, 1041, 2052, 3076]:
-            string = (
+            newName = (
                 entry.toUnicode()
-                .replace(" CL", " CL Nerd Font")
-                .replace(" TC", " TC Nerd Font")
-                .replace(" J", " J Nerd Font")
-                .replace(" SC", " SC Nerd Font")
-                .replace(" HC", " HC Nerd Font")
+                .replace(" CL", " CL unhinted Nerd Font")
+                .replace(" TC", " TC unhinted Nerd Font")
+                .replace(" J", " J unhinted Nerd Font")
+                .replace(" SC", " SC unhinted Nerd Font")
+                .replace(" HC", " HC unhinted Nerd Font")
             )
-            fontName.setName(string, nameID, platformID, platEncID, langID)
+            fontName.setName(newName, nameID, platformID, platEncID, langID)
 
         elif nameID in [1, 16]:
-            string = originalFontUniqueID.replace(
-                f" {originalFontPreferredStyle}", " Nerd Font"
+            newName = originalFontUniqueID.replace(
+                f" {originalFontPreferredStyle}", " unhinted Nerd Font"
             )
-            fontName.setName(string, nameID, platformID, platEncID, langID)
+            fontName.setName(newName, nameID, platformID, platEncID, langID)
 
         elif nameID == 3:
-            string = originalFontUniqueID.replace(
+            newName = originalFontUniqueID.replace(
                 f" {originalFontPreferredStyle}",
-                f" Nerd Font {originalFontPreferredStyle}",
+                f" unhinted Nerd Font {originalFontPreferredStyle}",
             )
-            fontName.setName(string, nameID, platformID, platEncID, langID)
+            fontName.setName(newName, nameID, platformID, platEncID, langID)
 
-        elif nameID == 6:
+        elif nameID in [4, 6, 18]:
+            newName = originalFontFullname.replace(
+                " Nerd Font Complete",
+                " unhinted Nerd Font Complete",
+            )
             fontName.setName(
-                originalFontFullname, nameID, platformID, platEncID, langID
+                newName, nameID, platformID, platEncID, langID
             )
 
     font.save(filename)
